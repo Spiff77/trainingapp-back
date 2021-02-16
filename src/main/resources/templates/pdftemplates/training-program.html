@@ -1,0 +1,40 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style type="text/css">
+        @page {
+            size: A4;
+            margin: 0;
+            padding:0;
+        }
+        #header {
+            position: running(header);
+            height:25mm;
+            margin-left:-25mm;
+        }
+        html{
+            background-color: lightblue;
+        }
+        body{
+            background-color: lightgreen;
+        }
+        h3 {
+            color: red;
+        }
+        section {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<h3 style="text-align: center">
+    <span th:text="'Welcome to ' + ${name} + '!'"></span>
+    <section th:utext="${content}"></section>
+</h3>
+
+<section>
+    <div>A</div>
+    <div>B</div>
+    <div>C</div>
+</section>
+</body>
+</html>
