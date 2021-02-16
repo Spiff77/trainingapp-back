@@ -1,5 +1,5 @@
 #### Stage 1: Build the application
-FROM openjdk:8-jdk-alpine as build
+FROM openjdk:11.0.4-slim as build
 
 # Set the current working directory inside the image
 WORKDIR /app
@@ -24,7 +24,7 @@ RUN ./mvnw package -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 #### Stage 2: A minimal docker image with command to run the app
-FROM openjdk:8-jre-alpine
+FROM openjdk:11.0.4-jre-slim
 
 ARG DEPENDENCY=/app/target/dependency
 
@@ -33,4 +33,4 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.treelevel.app.program.TrainingApplication"]
+ENTRYPOINT ["java","-cp","app:app/lib/*","com.treelevel.app.training.TrainingApplication"]
