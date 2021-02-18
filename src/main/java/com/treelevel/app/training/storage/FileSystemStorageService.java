@@ -33,12 +33,9 @@ public class FileSystemStorageService implements StorageService {
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
-        Resource r = resourceLoader.getResource(properties.getLocation());
-        System.out.println("-->"+r.isFile());
-        this.rootLocation = Paths.get("blabla");
-        //this.rootLocation = Paths.get("").getPath();
-        //System.out.println("--->"+this.rootLocation.toAbsolutePath().toString());
+        this.rootLocation = Paths.get(properties.getLocation());
     }
+
 
     @Override
     public void store(FolderName folder, MultipartFile file) {
