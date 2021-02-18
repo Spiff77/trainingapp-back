@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URLDecoder;
@@ -47,6 +48,7 @@ public class ProgramController {
     void deleteProgram(@PathVariable Long id) {
         repository.deleteById(id);
     }
+
     @GetMapping(value = "/getpdf", produces = MediaType.APPLICATION_PDF_VALUE)
     public void generatePdf(@PathVariable Long id) throws Exception {
 
@@ -55,7 +57,7 @@ public class ProgramController {
         String outputFolder = "src/main/resources/pdf/programs/" + program.getName().toUpperCase().replace(" ", "_") + "-" +  program.getId() + ".pdf";
 
         OutputStream outputStream;
-        outputStream = new FileOutputStream(outputFolder);
+        outputStream = new FileOutputStream(new File(outputFolder));
 
         Context context  = new Context();
         context.setVariable("name", program.getName());
