@@ -54,7 +54,7 @@ public class ProgramController {
 
         Program program =  repository.findById(id).orElseThrow( () -> new Exception("Can't find PDF"));
 
-        String outputFolder = "src/main/resources/pdf/programs/" + program.getName().toUpperCase().replace(" ", "_") + "-" +  program.getId() + ".pdf";
+        String outputFolder = ClassLoader.getSystemResource("pdf/programs/").getPath() + program.getName().toUpperCase().replace(" ", "_") + "-" +  program.getId() + ".pdf";
 
         OutputStream outputStream;
         outputStream = new FileOutputStream(new File(outputFolder));
