@@ -3,7 +3,10 @@ package com.treelevel.app.training;
 import com.treelevel.app.training.controller.ProgramController;
 import com.treelevel.app.training.model.Program;
 import com.treelevel.app.training.model.Visibility;
+import com.treelevel.app.training.model.auth.Role;
+import com.treelevel.app.training.model.auth.User;
 import com.treelevel.app.training.repository.ProgramRepository;
+import com.treelevel.app.training.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,12 +19,18 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import com.treelevel.app.training.storage.StorageProperties;
 import com.treelevel.app.training.storage.StorageService;
 
+import java.util.Set;
+import java.util.UUID;
+
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
 public class TrainingApplication {
 
     @Autowired
     ProgramRepository trainingRepo;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     ProgramController programController;
@@ -32,6 +41,20 @@ public class TrainingApplication {
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() throws Exception {
+        Role adminRole = new Role("ADMIN");
+        Role readerRole = new Role("READER");
+
+        userRepository.deleteAll();
+        User userAdmin = new User("admin", "$2y$10$yhImhJRIev3Dj1L31f4nKOS1xFwS12A3QS54N3EQxsEPuGxOocqEu");
+        userAdmin.setRoles(Set.of(adminRole));
+        userRepository.save(userAdmin);
+
+        User userBasic = new User("user", "$2y$10$yhImhJRIev3Dj1L31f4nKOS1xFwS12A3QS54N3EQxsEPuGxOocqEu");
+        userBasic.setApikey("47a6e3de-c73f-423d-8218-32bb58aa6f81");
+        userBasic.setRoles(Set.of(readerRole));
+        userRepository.save(userBasic);
+
+        trainingRepo.deleteAll();
         trainingRepo.save(
                 new Program(
                         "Angular les bases",
